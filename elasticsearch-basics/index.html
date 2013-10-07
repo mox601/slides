@@ -31,6 +31,26 @@
 		<!--[if lt IE 9]>
 		<script src="lib/js/html5shiv.js"></script>
 		<![endif]-->
+		<style>
+		.rounded-corners {
+			-moz-border-radius: 10px; /* Firefox */
+			-webkit-border-radius: 10px; /* Safari, Chrome */
+			border-radius: 10px; /* universal */
+		}
+		.node {
+			background: #00ff00;
+			margin: 10px;
+		}		
+		.cluster {
+			background: #ff0000;
+			border:5px solid gray;
+			padding:10px;
+			margin:10px;			
+		}
+		#cluster-exp {
+			width: 450px;
+		}
+		</style>
 	</head>
 
 	<body>
@@ -85,26 +105,62 @@
 							Each cluster has a single master node which is chosen automatically 
 							by the cluster and which can be replaced if the current master node fails.
 						</p>
+						<div id="cluster-exp" class="cluster rounded-corners">
+							my-app-cluster
+							<div class="fragment node rounded-corners">node-1</div>
+							<p></p>
+							<div class="fragment node rounded-corners">node-2</div>
+						</div>						
 					</section>					
 					<section>
 						<h1>Node</h1>
-						<p>...
+						<p>
+							A node is a running instance of elasticsearch which belongs to a cluster. 
+							Usually you should have one node per server. 
+							At startup, a node will use unicast (or multicast, if specified) 
+							to discover an existing cluster with the same cluster name and 
+							will try to join that cluster.
 						</p>
 					</section>
 					<section>
 						<h1>Index</h1>
-						<p>...
+						<p>
+							An index is like a database.  It has a mapping which defines multiple types. 
+							An index is a logical namespace which maps to one or more 
+							primary shards and can have zero or more replica shards. 
 						</p>
 					</section>	
 					<section>
 						<h1>Document</h1>
-						<p>...
+						<p>
+							A document is a JSON document which is stored in elasticsearch. 
+							Each document is stored in an index and has a type and an id. 
+							The original JSON document that is indexed 
+							will be stored in the _source field, which is returned by default 
+							when getting or searching for a document.							
 						</p>
 					</section>										
 					<section>
 						<h1>Shard</h1>
 						<p>
-							Primary
+							A shard is a single Lucene instance. It is a low-level “worker” unit 
+							which is managed automatically. 
+							An index can define the number of primary and replica shards, 
+							but code deal only with an index. 
+							Elasticsearch distributes shards amongst all nodes in the cluster, 
+							and to rebalance the cluster can move them from one node to another 
+							in the case of node failure, or the addition of new nodes.
+						</p>
+						<p>
+							Primary: 
+							Each document is stored in a single primary shard. 
+							When you index a document, it is indexed first on the primary shard, 
+							then on all its replicas. 
+							By default, an index has 5 primary shards. 
+							You can specify fewer or more primary shards to scale the number 
+							of documents that your index can handle. 
+							You cannot change the number of primary shards in an index
+							once the index is created.
 						</p>						
 						<p>
 							Replica
@@ -124,10 +180,7 @@
 						<h1>Analysis</h1>
 						<p>...
 						</p>
-					</section>
-					
-					
-													
+					</section>																							
 				</section> <!-- end glossary -->
 
 				<!-- Example of nested vertical slides -->
@@ -406,6 +459,7 @@ function linkify( selector ) {
 
 		<script src="lib/js/head.min.js"></script>
 		<script src="js/reveal.min.js"></script>
+		<script src="js/jquery-1.10.2.js"></script>
 
 		<script>
 
